@@ -4,7 +4,7 @@ Game Data Module - Starter Code
 
 Name: Madison Wilkins
 
-AI Usage: [Document any AI assistance used]
+AI Usage: a lil bit of chatgpt here and there for bug fixes, and code recommendations
 
 This module handles loading and validating game data from text files.
 """
