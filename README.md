@@ -149,3 +149,36 @@ Test files are provided for your learning but are protected. Modifying test file
 - Academic integrity investigation
 
 You can view tests to understand requirements, but any modifications will be automatically detected.
+
+Name: Madison Wilkins 
+Date: 02-Dec-2025
+
+| AI Usage | AI assisted in writing load and parse functions, debugging, load/save character function validation, and implementing core combat/quest logic. AI also helped me create this README file. |
+
+Module Architecture
+
+The project is split into simple, focused modules so each part of the game handles only one job.
+character_manager loads, saves, and manages character data.
+inventory_system tracks items, buying, selling, and usage.
+combat_system handles battles and enemy generation.
+game_data loads all item and quest definitions.
+exceptions stores all custom errors so the rest of the code stays clean and predictable.
+
+Exception Strategy
+
+Custom exceptions are raised only when something goes wrong in a controlled way.
+Examples include missing quests, invalid save data, insufficient gold, inventory limits, or corrupt files.
+Using specific exceptions makes bugs easier to track and prevents the game from silently failing.
+
+Design Choices
+
+The system is built in a modular way so any part of the game can be replaced, upgraded, or expanded without touching the others.
+Globals are used for active game state to keep the loop simple.
+Each mechanic—combat, quests, items—runs in its own module instead of one giant script to keep the code readable and maintainable.
+
+How to Play
+
+Run main.py in any Python environment.
+Pick “New Game” or “Load Game.”
+Create a character, explore, fight enemies, accept quests, manage inventory, and save progress.
+The game autosaves only when the save option is chosen in the menu.
