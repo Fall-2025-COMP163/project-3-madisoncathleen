@@ -75,7 +75,7 @@ def load_quests(filename="data/quests.txt"):
         prerequisite = quest_data["PREREQUISITE"]
         # Build final quest dict entry
         quests[quest_data["QUEST_ID"]] = {
-            "title": quest_data["TITLE"],
+            "quest_id": quest_data["QUEST_ID"], "title": quest_data["TITLE"],
             "description": quest_data["DESCRIPTION"],
             "reward_xp": reward_xp,
             "reward_gold": reward_gold,
