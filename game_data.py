@@ -20,70 +20,35 @@ from custom_exceptions import (
 # DATA LOADING FUNCTIONS
 # ============================================================================
 
-def load_quests(filename="data/quests.txt"):
-
-    # ok BET so first we pulling up with the reading of the file.
-    
-    try:
-        with open(filename, "r") as f:
-            try:
-                content = f.read()
-            except Exception:
-                raise CorruptedDataError("This file is unreadable or corrupted.")
-    except FileNotFoundError:
-        raise MissingDataFileError(f"File '{filename}' not found.")
-    
-    # BOOM we sptting the content into blocks by double newlines >_<
-    
-    meows = [meow.strip() for meow in content.split("\n\n") if meow.strip()]
-
+def load_quests(path="data/quests.txt"):
     quests = {}
 
-    required_fields = [
-        "QUEST_ID", "TITLE", "DESCRIPTION",
-        "REWARD_XP", "REWARD_GOLD", "REQUIRED_LEVEL",
-        "PREREQUISITE"
-    ]
+    try:
+        with open(path, "r") as file:
+            for line in file:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
 
-    # and then we parsin' 
+                parts = line.split("|")
+                if len(parts) != 6:
+                    raise InvalidDataFormatError("Quest entry is not formatted correctly.")
 
-    for meow in meows:
-        lines = meow.split("\n")
-        quest_data = {}
+                quest_id = parts[0].strip()
+                quests[quest_id] = {
+                    "quest_id": quest_id,
+                    "description": parts[1].strip(),
+                    "prerequisite": parts[2].strip(),
+                    "required_level": int(parts[3].strip()),
+                    "reward_gold": int(parts[4].strip()),
+                    "reward_xp": int(parts[5].strip())
+                }
 
-        for line in lines:
-            if ":" not in line:
-                raise InvalidDataFormatError(f"Invalid line: {line}")
+        return quests
 
-            key, value = line.split(":", 1)
-            key = key.strip()
-            value = value.strip()
+    except FileNotFoundError:
+        raise MissingDataFileError("Quest data file not found.")
 
-            quest_data[key] = value
-
-        # makin sure all required fields valid and converted correctly yurrrp
-        
-        for req in required_fields:
-            if req not in quest_data:
-                raise InvalidDataFormatError(f"Missing field {req} in {meow}")
-        try:
-            reward_xp = int(quest_data["REWARD_XP"])
-            reward_gold = int(quest_data["REWARD_GOLD"])
-            required_level = int(quest_data["REQUIRED_LEVEL"])
-        except ValueError:
-            raise InvalidDataFormatError("XP, Gold, or Level field is invalid.")
-        prerequisite = quest_data["PREREQUISITE"]
-        # Build final quest dict entry
-        quests[quest_data["QUEST_ID"]] = {
-            "title": quest_data["TITLE"],
-            "description": quest_data["DESCRIPTION"],
-            "reward_xp": reward_xp,
-            "reward_gold": reward_gold,
-            "required_level": required_level,
-            "prerequisite": prerequisite
-        }
-
-    return quests
 
 def load_items(filename="data/items.txt"):
     try:
